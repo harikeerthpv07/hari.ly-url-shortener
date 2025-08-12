@@ -1,7 +1,15 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 
-function App() {
+// Your original homepage code, unchanged
+function Home() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const handleSubmit = async () => {
@@ -15,7 +23,7 @@ function App() {
       body: JSON.stringify({ url: url }),
     });
     const result = await response.text();
-    setShortUrl(result);
+    setShortUrl(`https://harikeerth.xyz/projects/hari-ly/${result}`);
   };
 
   return (
@@ -126,6 +134,45 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+// This component will run when user visits /projects/hari-ly/:shortcode
+function RedirectPage() {
+  const { shortcode } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch(`https://hari-ly.onrender.com/${shortcode}`)
+      .then((res) => res.text())
+      .then((longUrl) => {
+        if (longUrl && !longUrl.includes("Link not found")) {
+          window.location.href = longUrl; // redirect browser
+        } else {
+          alert("Short link not found");
+          navigate("/"); // go back home
+        }
+      })
+      .catch(() => {
+        alert("Error fetching link");
+        navigate("/");
+      });
+  }, [shortcode, navigate]);
+
+  return (
+    <p style={{ textAlign: "center", marginTop: "50px" }}>Redirecting...</p>
+  );
+}
+
+// Wrap everything in Router with basename so React knows base URL path
+function App() {
+  return (
+    <Router basename="/projects/hari-ly">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path=":shortcode" element={<RedirectPage />} />
+      </Routes>
+    </Router>
   );
 }
 
