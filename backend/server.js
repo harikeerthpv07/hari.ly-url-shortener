@@ -1,11 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
-mongoose.connect(
-  "mongodb+srv://hari:hari@cluster0.hoscnfn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-);
-
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log(" MongoDB connected successfully!");
+  })
+  .catch((err) => {
+    console.error(" MongoDB connection error:", err);
+  });
 const Schema = mongoose.Schema({
   long_url: String,
   short_code: String,
@@ -154,5 +160,7 @@ app.get("/:shortCode", async (req, res) => {
     res.send("Link not found!");
   }
 });
-
-app.listen(3000);
+const PORT = 3000 || process.env.PORT;
+app.listen(PORT, () => {
+  console.log(` Server running on http://localhost:${PORT}`);
+});

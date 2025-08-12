@@ -76,7 +76,7 @@ function App() {
             This website is developed as part of my project and learning at the
             same time, not for production, there for there is limit for the
             storage, so Iam restricting to max 3 link shortening per slot for an
-            ip address (that is it works as slots: slot1: 12 AM to 6 AM, slot 2:
+            ip address (that is it works in slots: slot1: 12 AM to 6 AM, slot 2:
             6AM to 12 PM,slot 3: 12 PM to 6 PM ,slot 4: 6PM to 12 AM) Also
             Maximum of 10 shortening per ipaddress, after wards that ipaddress
             will be blocked permenantly, sorry but yeah &lt;3
