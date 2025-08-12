@@ -147,7 +147,7 @@ app.post("/shorten", async (req, res) => {
   }
 
   await Url.create({ long_url: url, short_code: shortCode });
-  res.send(`http://localhost:3000/${shortCode}`);
+  res.send(`https://hari-ly.onrender.com/${shortCode}`);
 });
 
 app.get("/:shortCode", async (req, res) => {
@@ -162,5 +162,5 @@ app.get("/:shortCode", async (req, res) => {
 });
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(` Server running on http://localhost:${PORT}`);
+  console.log(` Server running `);
 });
