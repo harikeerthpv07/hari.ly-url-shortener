@@ -8,10 +8,11 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-// Your original homepage code, unchanged
+// Your original homepage code
 function Home() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+
   const handleSubmit = async () => {
     if (!url || url.trim() === "") {
       alert("Please enter a URL!");
@@ -24,16 +25,14 @@ function Home() {
         body: JSON.stringify({ url: url }),
       });
       const result = await response.text();
-      // if (result.startsWith("http")) {
-      // setShortUrl(`https://harikeerth.xyz/projects/hari-ly/${result}`);
-      // }
+
       if (result.startsWith("http")) {
-        // Looks like a URL → success
-        setShortUrl(result); // Already full URL from backend
+        // Success - backend returns the full frontend URL
+        setShortUrl(result);
       } else {
-        // Backend sent error message → show it plainly
-        setShortUrl(""); // Clear any previous URL
-        alert(result); // Show the message in alert or set some error state to show nicely
+        // Error message from backend
+        setShortUrl("");
+        alert(result);
       }
     } catch (error) {
       alert("Failed to shorten URL");
@@ -152,41 +151,76 @@ function Home() {
   );
 }
 
-// This component will run when user visits /projects/hari-ly/:shortcode
+// FIXED: This component handles redirects when someone visits /shortcode
 function RedirectPage() {
   const { shortcode } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch the long URL from your backend API
     fetch(`https://hari-ly.onrender.com/${shortcode}`)
-      .then((res) => res.text())
-      .then((longUrl) => {
-        if (longUrl && !longUrl.includes("Link not found")) {
-          window.location.href = longUrl; // redirect browser
+      .then((response) => {
+        // Check if the response is a redirect (status 3xx)
+        if (response.redirected) {
+          // Backend sent a redirect, use the redirected URL
+          window.location.href = response.url;
         } else {
-          alert("Short link not found");
-          navigate("/"); // go back home
+          // Not a redirect, check the response text
+          return response.text().then((text) => {
+            if (text.includes("Link not found")) {
+              alert("Short link not found");
+              navigate("/");
+            } else {
+              // If it's a URL, redirect to it
+              if (text.startsWith("http")) {
+                window.location.href = text;
+              } else {
+                alert("Invalid response from server");
+                navigate("/");
+              }
+            }
+          });
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Error fetching link:", error);
         alert("Error fetching link");
         navigate("/");
       });
   }, [shortcode, navigate]);
 
   return (
-    <p style={{ textAlign: "center", marginTop: "50px" }}>Redirecting...</p>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <p>Redirecting...</p>
+      <div style={{ marginTop: "20px" }}>
+        <div
+          style={{
+            width: "50px",
+            height: "50px",
+            border: "3px solid #f3f3f3",
+            borderTop: "3px solid #007bff",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto",
+          }}
+        ></div>
+      </div>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
   );
 }
-
-// Wrap everything in Router with basename so React knows base URL path
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path=":shortcode" element={<RedirectPage />} />
+        <Route path="/:shortcode" element={<RedirectPage />} />
       </Routes>
     </Router>
   );

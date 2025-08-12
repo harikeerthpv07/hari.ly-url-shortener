@@ -156,7 +156,7 @@ app.post("/shorten", async (req, res) => {
   }
 
   await Url.create({ long_url: url, short_code: shortCode });
-  res.send(`https://hari-ly.onrender.com/${shortCode}`);
+  res.send(`https://hari-ly.harikeerth.xyz/${shortCode}`);
 });
 
 app.get("/:shortCode", async (req, res) => {
