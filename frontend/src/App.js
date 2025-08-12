@@ -17,13 +17,28 @@ function Home() {
       alert("Please enter a URL!");
       return;
     }
-    const response = await fetch("https://hari-ly.onrender.com/shorten", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url: url }),
-    });
-    const result = await response.text();
-    setShortUrl(`https://harikeerth.xyz/projects/hari-ly/${result}`);
+    try {
+      const response = await fetch("https://hari-ly.onrender.com/shorten", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url }),
+      });
+      const result = await response.text();
+      // if (result.startsWith("http")) {
+      // setShortUrl(`https://harikeerth.xyz/projects/hari-ly/${result}`);
+      // }
+      if (result.startsWith("http")) {
+        // Looks like a URL → success
+        setShortUrl(result); // Already full URL from backend
+      } else {
+        // Backend sent error message → show it plainly
+        setShortUrl(""); // Clear any previous URL
+        alert(result); // Show the message in alert or set some error state to show nicely
+      }
+    } catch (error) {
+      alert("Failed to shorten URL");
+      console.error(error);
+    }
   };
 
   return (
