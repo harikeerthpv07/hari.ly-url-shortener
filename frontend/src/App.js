@@ -180,9 +180,10 @@ function RedirectPage() {
 }
 
 // Wrap everything in Router with basename so React knows base URL path
+
 function App() {
   return (
-    <Router basename="/projects/hari-ly">
+    <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path=":shortcode" element={<RedirectPage />} />

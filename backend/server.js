@@ -68,7 +68,7 @@ app.post("/shorten", async (req, res) => {
       }
       if (ippresent.count <= 0) {
         return res.send(
-          "Your limit for this 6-hour slot is finished. Next refresh: 12 am"
+          "Your limit for this 6-hour slot is finished. you can retry in next slot"
         );
       } else {
         ippresent.count--;
@@ -84,7 +84,7 @@ app.post("/shorten", async (req, res) => {
       }
       if (ippresent.count <= 0) {
         return res.send(
-          "Your limit for this 6-hour slot is finished. Next refresh: 6pm"
+          "Your limit for this 6-hour slot is finished. you can retry in next slot"
         );
       } else {
         ippresent.count--;
@@ -100,7 +100,7 @@ app.post("/shorten", async (req, res) => {
       }
       if (ippresent.count <= 0) {
         return res.send(
-          "Your limit for this 6-hour slot is finished. Next refresh: 12pm"
+          "Your limit for this 6-hour slot is finished. you can retry in next slot"
         );
       } else {
         ippresent.count--;
@@ -116,7 +116,7 @@ app.post("/shorten", async (req, res) => {
       }
       if (ippresent.count <= 0) {
         return res.send(
-          "Your limit for this 6-hour slot is finished. Next refresh: 6am"
+          "Your limit for this 6-hour slot is finished. you can retry in next slot"
         );
       } else {
         ippresent.count--;
