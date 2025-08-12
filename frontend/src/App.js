@@ -9,7 +9,7 @@ function App() {
       alert("Please enter a URL!");
       return;
     }
-    const response = await fetch("http://localhost:3000/shorten", {
+    const response = await fetch("https://hari-ly.onrender.com/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: url }),
