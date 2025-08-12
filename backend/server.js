@@ -41,7 +41,7 @@ const app = express();
 app.set("trust proxy", true);
 
 const corsOptions = {
-  origin: "https://your-frontend-domain.com", // replace with your frontend domain or use "*" for testing
+  origin: "https://hari-ly.harikeerth.xyz", // replace with your frontend domain or use "*" for testing
   methods: ["GET", "POST", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
 };
